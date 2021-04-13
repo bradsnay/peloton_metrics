@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  devbox: &devbox
+    build:
+      context: "."
+      dockerfile: "./docker/devbox.dockerfile"
+    volumes:
+      - .:/app
+
+  lock-requirements:
+    <<: *devbox
+    entrypoint: "/bin/bash"
+    command: "./docker/scripts/lock_requirements.bash"
