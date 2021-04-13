@@ -9,12 +9,16 @@ from requests.auth import HTTPBasicAuth
 
 class PelotonApiClient:
 
+    # Base URL for all endpoints.
     BASE_URL = "https://api.onepeloton.com"
+
+    # Let Peloton Engineers know who we are.
     USER_AGENT = "https://github.com/snayski/peloton_metrics"
 
-    AUTH_LOGIN_URI = '/auth/login'
+    # Login endpoint for creating our session.
+    AUTH_LOGIN_ENDPOINT = '/auth/login'
 
-    # Headers we'll be using for each request
+    # Static request headers.
     headers = {
         "Content-Type": "application/json;charset=UTF-8",
         "User-Agent": USER_AGENT,
@@ -52,7 +56,7 @@ class PelotonApiClient:
         self.api_session = requests.Session()
 
         response = self.api_session.post(
-            self._generate_full_uri(self.AUTH_LOGIN_URI),
+            self._generate_full_uri(self.AUTH_LOGIN_ENDPOINT),
             json=payload,
             headers=self.headers,
             auth=HTTPBasicAuth(self.user_name, self.password)
