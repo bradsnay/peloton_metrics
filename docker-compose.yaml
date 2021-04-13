@@ -16,6 +16,6 @@ services:
     <<: *devbox
     entrypoint: "/usr/local/bin/python"
 
-  static_test_bsnay:
+  static_test_snayski:
     <<: *python
-    command: "./static_test/test_bsnay.py"
+    command: "/app/static_test/snayski_client_test.py"
