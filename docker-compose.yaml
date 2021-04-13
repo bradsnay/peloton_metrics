@@ -11,3 +11,11 @@ services:
     <<: *devbox
     entrypoint: "/bin/bash"
     command: "./docker/scripts/lock_requirements.bash"
+
+  python: &python
+    <<: *devbox
+    entrypoint: "/usr/local/bin/python"
+
+  static_test_bsnay:
+    <<: *python
+    command: "./static_test/test_bsnay.py"
