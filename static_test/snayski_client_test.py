@@ -6,5 +6,4 @@ Static test for api client for snayski
 from peloton_metrics.user_clients.snayski_client import SnayskiClient
 
 client = SnayskiClient()
-print(client.fetch_all_workouts())
-
+client.save_all_workouts(client.fetch_all_workouts())

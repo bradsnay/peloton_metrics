@@ -10,6 +10,7 @@ The files in the user_configs directory should be named as such "<user_name>.jso
 """
 from abc import ABC, abstractmethod
 from peloton_metrics.peloton_api_client import PelotonApiClient
+from peloton_metrics.big_table.big_table_client import BigTableClient
 import json
 
 
@@ -35,7 +36,7 @@ class BaseUserClient(ABC, PelotonApiClient):
     def fetch_all_workouts(self):
         params = {
             'page': 0,
-            'limit': 10,
+            'limit': 100,
             'joins': 'ride,ride.instructor'
         }
         all_workouts = []
@@ -51,3 +52,7 @@ class BaseUserClient(ABC, PelotonApiClient):
             all_workouts.extend(workout_data)
 
         return all_workouts
+
+    def save_all_workouts(self, workout_data: list):
+        client = BigTableClient()
+        client.save_all_workout_data(self.get_user_name(), workout_data)
