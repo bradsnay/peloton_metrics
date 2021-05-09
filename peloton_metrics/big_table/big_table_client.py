@@ -63,12 +63,13 @@ class BigTableClient:
             for column in self.included_metrics():
                 row[column] = self._fetch_value(column, workout)
             rows_to_save.append(row)
-        # TODO: Check errors in the response because they show up silently.
-        result = self.client.insert_rows_json(
+        # TODO: Need to only pull the data that's not already stored in BigQuery.
+        errors = self.client.insert_rows_json(
             'pelotonmetrics.peloton_metrics.user_peloton_metrics',
             rows_to_save,
         )
-        return result
+        if errors:
+            raise Exception("Encountered errors while inserting rows: {}".format(errors))
 
     def _fetch_value(self, column_key: str, workout: dict):
         keys = column_key.split('__')
