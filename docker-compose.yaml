@@ -18,4 +18,4 @@ services:
 
   static_test_snayski:
     <<: *python
-    command: "/app/static_test/snayski_client_test.py"
+    command: "/app/static_test/client_test.py"

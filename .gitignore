@@ -1,5 +1,5 @@
 # Defined by this repository
-user_configs/
+secrets/
 .DS_Store
 .idea/
 

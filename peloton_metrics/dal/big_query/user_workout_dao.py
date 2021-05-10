@@ -1,8 +1,8 @@
 from google.cloud import bigquery
-from peloton_metrics.user_workout_metrics_extractor import UserWorkoutMetricsExtractor
+from peloton_metrics.metrics_extraction.user_workout_metrics_extractor import UserWorkoutMetricsExtractor
 
 
-class BigQueryUserWorkoutClient:
+class UserWorkoutDao:
 
     def __init__(self):
         self.client = bigquery.Client()
@@ -11,7 +11,7 @@ class BigQueryUserWorkoutClient:
     def save_all_workout_data(self, user_name: str, workout_data: list):
         rows_to_save = self.metrics_extractor.extract_metrics(workout_data, user_name=user_name)
         errors = self.client.insert_rows_json(
-            'pelotonmetrics.peloton_metrics.user_peloton_metrics',
+            'pelotonmetrics.peloton_metrics.user_workouts',
             rows_to_save,
         )
         if errors:
@@ -26,7 +26,7 @@ class BigQueryUserWorkoutClient:
         sql = f"""
             SELECT
                 created_at
-            FROM `pelotonmetrics.peloton_metrics.user_peloton_metrics`
+            FROM `pelotonmetrics.peloton_metrics.user_workouts`
             WHERE user_id = @user_id
             ORDER BY created_at DESC
             LIMIT 1;

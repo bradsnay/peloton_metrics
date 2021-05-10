@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from copy import deepcopy
 
 
 class MetricsExtractor(ABC):
@@ -11,7 +12,9 @@ class MetricsExtractor(ABC):
     def extract_metrics(self, data: list, **kwargs) -> list:
         extracted_metrics = []
         for item in data:
-            row = kwargs
+            # Deep copy additional hard coded row values to create a new reference.
+            # Otherwise we'll end up inserting duplicate rows.
+            row = deepcopy(kwargs)
             for column in self.included_metrics():
                 row[column] = self._fetch_value(column, item)
             extracted_metrics.append(row)
