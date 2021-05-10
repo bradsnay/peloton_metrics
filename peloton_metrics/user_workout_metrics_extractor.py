@@ -1,11 +1,7 @@
-from google.cloud import bigquery
+from peloton_metrics.metrics_extractor import MetricsExtractor
 
 
-class BigTableClient:
-
-    def __init__(self):
-        self.client = bigquery.Client()
-
+class UserWorkoutMetricsExtractor(MetricsExtractor):
     @staticmethod
     def included_metrics() -> set:
         return {
@@ -55,29 +51,3 @@ class BigTableClient:
             'effort_zones__heart_rate_zone_durations__heart_rate_z4_duration',
             'effort_zones__heart_rate_zone_durations__heart_rate_z5_duration',
         }
-
-    def save_all_workout_data(self, user_name: str, workout_data: list):
-        rows_to_save = []
-        for workout in workout_data:
-            row = {'user_name': user_name}
-            for column in self.included_metrics():
-                row[column] = self._fetch_value(column, workout)
-            rows_to_save.append(row)
-        # TODO: Need to only pull the data that's not already stored in BigQuery.
-        errors = self.client.insert_rows_json(
-            'pelotonmetrics.peloton_metrics.user_peloton_metrics',
-            rows_to_save,
-        )
-        if errors:
-            raise Exception("Encountered errors while inserting rows: {}".format(errors))
-
-    def _fetch_value(self, column_key: str, workout: dict):
-        keys = column_key.split('__')
-        return self._fetch_value_recursive(keys, workout)
-
-    def _fetch_value_recursive(self, keys: list, workout: dict):
-        if len(keys) == 0 or workout is None:
-            return str(workout)
-        if keys[0] in workout:
-            return self._fetch_value_recursive(keys[1:], workout[keys[0]])
-

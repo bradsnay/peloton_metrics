@@ -10,7 +10,7 @@ The files in the user_configs directory should be named as such "<user_name>.jso
 """
 from abc import ABC, abstractmethod
 from peloton_metrics.peloton_api_client import PelotonApiClient
-from peloton_metrics.big_table.big_table_client import BigTableClient
+from peloton_metrics.big_table.big_query_user_workout_client import BigQueryUserWorkoutClient
 import json
 
 
@@ -54,5 +54,13 @@ class BaseUserClient(ABC, PelotonApiClient):
         return all_workouts
 
     def save_all_workouts(self, workout_data: list):
-        client = BigTableClient()
-        client.save_all_workout_data(self.get_user_name(), workout_data)
+        client = BigQueryUserWorkoutClient()
+        last_saved_workout_timestamp = client.fetch_most_recently_saved_workout_timestamp(self.user_id)
+
+        new_workouts_to_save = []
+        for workout in workout_data:
+            # Only save workouts we haven't already saved.
+            if workout["created_at"] > last_saved_workout_timestamp:
+                new_workouts_to_save.append(workout)
+        if len(new_workouts_to_save) > 0:
+            client.save_all_workout_data(self.get_user_name(), new_workouts_to_save)
