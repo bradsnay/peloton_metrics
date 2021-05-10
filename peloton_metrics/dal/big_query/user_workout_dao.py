@@ -1,15 +1,12 @@
 from google.cloud import bigquery
-from peloton_metrics.metrics_extraction.user_workout_metrics_extractor import UserWorkoutMetricsExtractor
 
 
 class UserWorkoutDao:
 
     def __init__(self):
         self.client = bigquery.Client()
-        self.metrics_extractor = UserWorkoutMetricsExtractor()
 
-    def save_all_workout_data(self, user_name: str, workout_data: list):
-        rows_to_save = self.metrics_extractor.extract_metrics(workout_data, user_name=user_name)
+    def save_all_workout_data(self, rows_to_save: list):
         errors = self.client.insert_rows_json(
             'pelotonmetrics.peloton_metrics.user_workouts',
             rows_to_save,

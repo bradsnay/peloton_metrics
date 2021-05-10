@@ -12,13 +12,16 @@ class MetricsExtractor(ABC):
     def extract_metrics(self, data: list, **kwargs) -> list:
         extracted_metrics = []
         for item in data:
-            # Deep copy additional hard coded row values to create a new reference.
-            # Otherwise we'll end up inserting duplicate rows.
-            row = deepcopy(kwargs)
-            for column in self.included_metrics():
-                row[column] = self._fetch_value(column, item)
-            extracted_metrics.append(row)
+            extracted_metrics.append(self.extract_one(item, **kwargs))
         return extracted_metrics
+
+    def extract_one(self, item: dict, **kwargs):
+        # Deep copy additional hard coded row values to create a new reference.
+        # Otherwise we'll end up inserting duplicate rows.
+        row = deepcopy(kwargs)
+        for column in self.included_metrics():
+            row[column] = self._fetch_value(column, item)
+        return row
 
     def _fetch_value(self, column_key: str, workout: dict):
         keys = column_key.split('__')
