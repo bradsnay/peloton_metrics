@@ -9,6 +9,7 @@ class RefreshWorkoutProcessor:
         self.workout_client = WorkoutMetricsClient()
 
     def run(self):
+        print(f"------Refreshing workouts started------")
         tracked_users = self.tracked_users_dao.fetch_tracked_users()
         for user in tracked_users:
             user_id = user['user_id']
@@ -22,4 +23,4 @@ class RefreshWorkoutProcessor:
                 )
             except PrivateUserException:
                 print(f"User account is private. user_id:{user_id}")
-                return
+        print(f"------Refreshing workouts ended------")

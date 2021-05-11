@@ -1,0 +1,15 @@
+# workout_refresh_cronjob.yaml
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: workout-refresh
+spec:
+  schedule: "@hourly"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: workout-refresh
+            image: us.gcr.io/pelotonmetrics/workout-refresh:latest
+          restartPolicy: OnFailure
