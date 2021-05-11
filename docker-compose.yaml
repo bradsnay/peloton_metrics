@@ -7,6 +7,12 @@ services:
     volumes:
       - .:/app
 
+  workout_refresh:
+    <<: *devbox
+    build:
+      context: "."
+      dockerfile: "./docker/workout_refresh.dockerfile"
+
   lock-requirements:
     <<: *devbox
     entrypoint: "/bin/bash"
