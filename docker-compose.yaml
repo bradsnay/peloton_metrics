@@ -13,7 +13,12 @@ services:
       context: "."
       dockerfile: "./docker/workout_refresh.dockerfile"
 
-  lock-requirements:
+  clean_code:
+    <<: *devbox
+    entrypoint: "/bin/bash"
+    command: "./docker/scripts/clean_up_code.bash"
+
+  lock_requirements:
     <<: *devbox
     entrypoint: "/bin/bash"
     command: "./docker/scripts/lock_requirements.bash"

@@ -2,7 +2,6 @@ from peloton_metrics.dal.peloton_api_clients.peloton_api_client import PelotonAp
 
 
 class UserClient(PelotonApiClient):
-
     @staticmethod
     def user_endpoint(user_id: str) -> str:
         return f"/api/user/{user_id}"

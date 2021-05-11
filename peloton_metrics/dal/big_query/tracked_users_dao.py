@@ -2,7 +2,6 @@ from google.cloud import bigquery
 
 
 class TrackedUsersDao:
-
     def __init__(self):
         self.client = bigquery.Client()
 

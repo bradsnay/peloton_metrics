@@ -3,7 +3,6 @@ from copy import deepcopy
 
 
 class MetricsExtractor(ABC):
-
     @staticmethod
     @abstractmethod
     def included_metrics() -> set:
@@ -24,7 +23,7 @@ class MetricsExtractor(ABC):
         return row
 
     def _fetch_value(self, column_key: str, workout: dict):
-        keys = column_key.split('__')
+        keys = column_key.split("__")
         return self._fetch_value_recursive(keys, workout)
 
     def _fetch_value_recursive(self, keys: list, workout: dict):

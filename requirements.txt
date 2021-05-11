@@ -1,3 +1,5 @@
+black==21.5b1
 google-cloud-bigquery==2.16.0
+isort==5.8.0
 requests==2.25.1
 sort-requirements==1.3.0

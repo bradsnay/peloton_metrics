@@ -1,11 +1,12 @@
-from peloton_metrics.dal.peloton_api_clients.workout_metrics_client import WorkoutMetricsClient
-from peloton_metrics.dal.peloton_api_clients.user_client import UserClient
 from peloton_metrics.dal.big_query.tracked_users_dao import TrackedUsersDao
+from peloton_metrics.dal.peloton_api_clients.user_client import UserClient
+from peloton_metrics.dal.peloton_api_clients.workout_metrics_client import (
+    WorkoutMetricsClient,
+)
 from peloton_metrics.exceptions.private_user_exception import PrivateUserException
 
 
 class WorkoutMetricsFollowerCrawler:
-
     def __init__(self):
         self.workout_client = WorkoutMetricsClient()
         self.user_client = UserClient(self.workout_client.api_session)
@@ -33,10 +34,7 @@ class WorkoutMetricsFollowerCrawler:
 
         try:
             self.workout_client.save_all_workouts(
-                user_id,
-                self.workout_client.fetch_all_workouts(
-                    user_id
-                )
+                user_id, self.workout_client.fetch_all_workouts(user_id)
             )
         except PrivateUserException:
             print(f"User account is private. user_id:{user_id}")
@@ -47,7 +45,7 @@ class WorkoutMetricsFollowerCrawler:
         users.extend(self.user_client.fetch_user_followers(user_id))
 
         for user in users:
-            user_id = user['id']
+            user_id = user["id"]
             # If my followers also follow me, I'll see myself again.
             if user_id in self.seen_user_ids:
                 continue

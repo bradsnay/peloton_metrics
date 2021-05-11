@@ -1,4 +1,2 @@
-
-
 class PrivateUserException(Exception):
     pass
