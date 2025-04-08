@@ -3,4 +3,4 @@ docker-compose.yaml
 README.md
 requirements.txt
 static_test/*
-docker/*
+# docker/*

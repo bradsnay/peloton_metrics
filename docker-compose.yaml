@@ -42,14 +42,41 @@ services:
     restart: always
     shm_size: 128mb
     environment:
-      POSTGRES_PASSWORD: "pwd123"
-      POSTGRES_USER: "snayski"
+      POSTGRES_DB: peloton_metrics
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_pw
+      POSTGRES_USER_FILE: /run/secrets/postgres_user
     ports:
       - 5432:5432
     networks:
       - peloton_metrics
     volumes:
       - pgdata:/var/lib/postgresql/data
+    secrets:
+       - postgres_pw
+       - postgres_user
+
+  liquibase:
+    build:
+      context: '.'
+      dockerfile: ./docker/liquibase.dockerfile
+      secrets:
+        - postgres_pw
+        - postgres_user
+    depends_on:
+      - postgres
+    volumes:
+      - ./liquibase:/liquibase/changelog
+      - .:/app
+    command: ["update", "--defaults-file=/liquibase/liquibase.properties"]
+    networks:
+      - peloton_metrics
+
+secrets:
+  postgres_pw:
+    file: ./docker/secrets/postgres_root_pw
+  
+  postgres_user:
+    file: ./docker/secrets/postgres_user
 
 networks:
   peloton_metrics:
