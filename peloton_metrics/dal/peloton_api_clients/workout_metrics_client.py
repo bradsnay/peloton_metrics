@@ -6,16 +6,16 @@ secrets directory (not checked into git for obvious reasons).
 
 @author Brad Snay <bradsnay@gmail.com>
 """
-from peloton_metrics.dal.big_query.user_workout_dao import UserWorkoutDao
-from peloton_metrics.dal.peloton_api_clients.peloton_api_client import PelotonApiClient
+from peloton_metrics.dal.peloton_api_clients.peloton_api_client import \
+    PelotonApiClient
 from peloton_metrics.dal.peloton_api_clients.user_client import UserClient
-from peloton_metrics.exceptions.private_user_exception import PrivateUserException
-from peloton_metrics.metrics_extraction.user_workout_metrics_extractor import (
-    UserWorkoutMetricsExtractor,
-)
-from peloton_metrics.metrics_extraction.workout_performance_extractor import (
-    WorkoutPerformanceExtractor,
-)
+from peloton_metrics.dal.postgres.user_workout_dao import UserWorkoutDao
+from peloton_metrics.exceptions.private_user_exception import \
+    PrivateUserException
+from peloton_metrics.metrics_extraction.user_workout_metrics_extractor import \
+    UserWorkoutMetricsExtractor
+from peloton_metrics.metrics_extraction.workout_performance_extractor import \
+    WorkoutPerformanceExtractor
 
 
 class WorkoutMetricsClient(PelotonApiClient):

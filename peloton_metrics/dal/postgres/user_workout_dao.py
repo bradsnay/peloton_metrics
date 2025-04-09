@@ -1,5 +1,3 @@
-from google.cloud import bigquery
-
 
 class UserWorkoutDao:
     def __init__(self):

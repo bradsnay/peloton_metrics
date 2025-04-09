@@ -9,19 +9,25 @@ services:
       - postgres
     networks:
       - peloton_metrics
+    environment:
+      RUNTIME_ENVIRONMENT: local
+      SECRETS_FOLDER: /run/secrets/
+    secrets:
+      - postgres_pw
+      - postgres_user
 
-  workout_refresh:
+  workout-refresh:
     <<: *devbox
     build:
       context: "."
       dockerfile: "./docker/workout_refresh.dockerfile"
 
-  clean_code:
+  clean-code:
     <<: *devbox
     entrypoint: "/bin/bash"
     command: "./docker/scripts/clean_up_code.bash"
 
-  lock_requirements:
+  lock-requirements:
     <<: *devbox
     entrypoint: "/bin/bash"
     command: "./docker/scripts/lock_requirements.bash"
@@ -30,7 +36,7 @@ services:
     <<: *devbox
     entrypoint: "/usr/local/bin/python"
 
-  static_test_snayski:
+  static-test-snayski:
     <<: *python
     command: "/app/static_test/client_test.py"
 

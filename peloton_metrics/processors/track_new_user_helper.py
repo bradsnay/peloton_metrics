@@ -1,11 +1,10 @@
-from peloton_metrics.dal.big_query.tracked_users_dao import TrackedUsersDao
 from peloton_metrics.dal.peloton_api_clients.user_client import UserClient
-from peloton_metrics.dal.peloton_api_clients.workout_metrics_client import (
-    WorkoutMetricsClient,
-)
+from peloton_metrics.dal.peloton_api_clients.workout_metrics_client import \
+    WorkoutMetricsClient
+from peloton_metrics.dal.postgres.tracked_users_dao import TrackedUsersDao
 
 
-class TrackNewUserProcessor:
+class TrackNewUserHelper:
     def track_new_user(self, user_id_or_name: str):
         # Fetch the user's profile so we can extract their user_id and username
         user_profile = UserClient().fetch_user_profile(user_id_or_name)
@@ -20,3 +19,4 @@ class TrackNewUserProcessor:
         workout_client.save_all_workouts(
             user_id, workout_client.fetch_all_workouts(user_id)
         )
+

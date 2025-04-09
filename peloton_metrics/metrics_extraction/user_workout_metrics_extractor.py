@@ -1,4 +1,5 @@
-from peloton_metrics.metrics_extraction.metrics_extractor import MetricsExtractor
+from peloton_metrics.metrics_extraction.metrics_extractor import \
+    MetricsExtractor
 
 
 class UserWorkoutMetricsExtractor(MetricsExtractor):

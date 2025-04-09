@@ -1,7 +1,13 @@
-from peloton_metrics.dal.peloton_api_clients.peloton_api_client import PelotonApiClient
+from peloton_metrics.dal.peloton_api_clients.peloton_api_client import \
+    PelotonApiClient
 
 
 class UserClient(PelotonApiClient):
+
+    @staticmethod
+    def self_identify_endpoint() -> str:
+        return '/api/me'
+
     @staticmethod
     def user_endpoint(user_id: str) -> str:
         return f"/api/user/{user_id}"
@@ -13,6 +19,9 @@ class UserClient(PelotonApiClient):
     @staticmethod
     def user_following_endpoint(user_id: str) -> str:
         return f"/api/user/{user_id}/following"
+    
+    def self_identify(self):
+        return self.request(self.self_identify_endpoint()).json()
 
     def fetch_user_profile(self, user_id: str):
         return self.request(self.user_endpoint(user_id)).json()

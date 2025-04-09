@@ -1,0 +1,26 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "docker-build",
+			"label": "docker-build",
+			"platform": "python",
+			"dockerBuild": {
+				"tag": "pelotonmetrics:latest",
+				"dockerfile": "${workspaceFolder}/docker/devbox.dockerfile",
+				"context": "${workspaceFolder}",
+				"pull": true
+			}
+		},
+		{
+			"type": "docker-run",
+			"label": "debug-workout-refresh",
+			"dependsOn": [
+				"docker-build"
+			],
+			"python": {
+				"file": "peloton_metrics/run/run_workout_refresh.py"
+			}
+		}
+	]
+}

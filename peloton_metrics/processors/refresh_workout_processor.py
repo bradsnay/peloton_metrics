@@ -1,12 +1,14 @@
-from peloton_metrics.dal.big_query.tracked_users_dao import TrackedUsersDao
-from peloton_metrics.dal.peloton_api_clients.workout_metrics_client import (
-    WorkoutMetricsClient,
-)
-from peloton_metrics.exceptions.private_user_exception import PrivateUserException
+from peloton_metrics.dal.peloton_api_clients.workout_metrics_client import \
+    WorkoutMetricsClient
+from peloton_metrics.dal.postgres.tracked_users_dao import TrackedUsersDao
+from peloton_metrics.exceptions.private_user_exception import \
+    PrivateUserException
+from peloton_metrics.processors.base_processor import BaseProcessor
 
 
-class RefreshWorkoutProcessor:
+class RefreshWorkoutProcessor(BaseProcessor):
     def __init__(self):
+        super().__init__()
         self.tracked_users_dao = TrackedUsersDao()
         self.workout_client = WorkoutMetricsClient()
 
