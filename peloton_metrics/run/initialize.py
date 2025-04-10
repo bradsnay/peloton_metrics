@@ -1,3 +1,5 @@
-from peloton_metrics.processors.user_initialization_processor import UserInitializationProcessor
+from peloton_metrics.processors.user_initialization_processor import (
+    UserInitializationProcessor,
+)
 
 UserInitializationProcessor().run()

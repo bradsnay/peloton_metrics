@@ -1,4 +1,3 @@
-
 class UserWorkoutDao:
     def __init__(self):
         self.client = bigquery.Client()

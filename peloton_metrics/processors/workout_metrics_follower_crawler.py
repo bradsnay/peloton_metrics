@@ -1,9 +1,9 @@
 from peloton_metrics.dal.peloton_api_clients.user_client import UserClient
-from peloton_metrics.dal.peloton_api_clients.workout_metrics_client import \
-    WorkoutMetricsClient
+from peloton_metrics.dal.peloton_api_clients.workout_metrics_client import (
+    WorkoutMetricsClient,
+)
 from peloton_metrics.dal.postgres.tracked_users_dao import TrackedUsersDao
-from peloton_metrics.exceptions.private_user_exception import \
-    PrivateUserException
+from peloton_metrics.exceptions.private_user_exception import PrivateUserException
 from peloton_metrics.processors.base_processor import BaseProcessor
 
 
@@ -25,6 +25,7 @@ class WorkoutMetricsFollowerCrawler(BaseProcessor):
         and so on...
         :return: None
         """
+
         def _run_recursion_helper(user_id: str, depth: int):
             if depth < 0:
                 return

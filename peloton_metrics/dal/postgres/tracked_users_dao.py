@@ -25,7 +25,7 @@ class TrackedUsersDao(BaseDao):
         return self.execute_sql(sql)
 
     def insert_new_tracked_user(self, user_id: str, user_name: str):
-        # TODO: Try to refactor this into a MERGE statement 
+        # TODO: Try to refactor this into a MERGE statement
         sql = f"""
             INSERT INTO public.tracked_users (
                 user_id,

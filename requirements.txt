@@ -1,4 +1,4 @@
-black==21.5b1
+black==25.1.0
 inject==5.2.1
 isort==5.8.0
 psycopg==3.2.6

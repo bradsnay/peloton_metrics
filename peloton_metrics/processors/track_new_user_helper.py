@@ -1,6 +1,7 @@
 from peloton_metrics.dal.peloton_api_clients.user_client import UserClient
-from peloton_metrics.dal.peloton_api_clients.workout_metrics_client import \
-    WorkoutMetricsClient
+from peloton_metrics.dal.peloton_api_clients.workout_metrics_client import (
+    WorkoutMetricsClient,
+)
 from peloton_metrics.dal.postgres.tracked_users_dao import TrackedUsersDao
 
 
@@ -19,4 +20,3 @@ class TrackNewUserHelper:
         workout_client.save_all_workouts(
             user_id, workout_client.fetch_all_workouts(user_id)
         )
-

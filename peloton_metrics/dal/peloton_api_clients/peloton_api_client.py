@@ -3,6 +3,7 @@ The main Peloton API client.
 
 @author Brad Snay <bradsnay@gmail.com>
 """
+
 import json
 
 import requests
