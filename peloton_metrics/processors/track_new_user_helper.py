@@ -13,7 +13,7 @@ class TrackNewUserHelper:
         user_name = user_profile["username"]
 
         # Save the user id and name to our internal database so that our refresh job will pick it up.
-        TrackedUsersDao().insert_new_tracked_user(user_id, user_name)
+        TrackedUsersDao().upsert_tracked_user(user_id, user_name)
 
         # Save all workout data for the user for the first time.
         workout_client = WorkoutMetricsClient()
