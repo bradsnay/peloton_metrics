@@ -31,7 +31,6 @@ CREATE TABLE public.workouts(
     PRIMARY KEY(user_id, workout_id)
 );
 
-CREATE INDEX idx_user_id ON public.workouts(user_id);
 CREATE INDEX idx_start_time ON public.workouts(start_time);
 CREATE INDEX idx_status ON public.workouts(status);
 CREATE INDEX idx_fitness_disipline ON public.workouts(fitness_disipline);
