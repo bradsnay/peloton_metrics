@@ -21,9 +21,7 @@ class RefreshWorkoutProcessor(BaseProcessor):
             print(f"Updating metrics for user id: {user_id}")
             try:
                 workouts = self.workout_client.fetch_all_workouts(user_id)
-                self.workout_client.save_all_workouts(
-                    user_id, workouts
-                )
+                self.workout_client.save_all_workouts(user_id, workouts)
             except PrivateUserException:
                 print(f"User account is private. user_id:{user_id}")
         print(f"------Refreshing workouts ended------")

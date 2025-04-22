@@ -2,10 +2,10 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from peloton_metrics.dal.postgres.base_dao import BaseDao
+from peloton_metrics.dal.postgres.helpers.decorators import select_as_dictionaries
 from peloton_metrics.dal.postgres.helpers.json_helper import JsonHelper
 from peloton_metrics.dal.postgres.helpers.sql_type_constants import SqlType
 from peloton_metrics.models.user import User
-from peloton_metrics.dal.postgres.helpers.decorators import select_as_dictionaries
 
 
 class TrackedUsersDao(BaseDao):

@@ -1,5 +1,6 @@
 from peloton_metrics.dal.postgres.base_dao import BaseDao
 
+
 class WorkoutDao(BaseDao):
 
     def save_all_workout_data(self, rows_to_save: list):

@@ -1,5 +1,6 @@
 from peloton_metrics.dal.postgres.base_dao import BaseDao
 
+
 class UserWorkoutDao(BaseDao):
     def __init__(self):
         self.client = bigquery.Client()
