@@ -9,7 +9,7 @@ secrets directory (not checked into git for obvious reasons).
 
 from peloton_metrics.dal.peloton_api_clients.peloton_api_client import PelotonApiClient
 from peloton_metrics.dal.peloton_api_clients.user_client import UserClient
-from peloton_metrics.dal.postgres.user_workout_dao import UserWorkoutDao
+from peloton_metrics.dal.postgres.workout_dao import UserWorkoutDao
 from peloton_metrics.exceptions.private_user_exception import PrivateUserException
 from peloton_metrics.metrics_extraction.user_workout_metrics_extractor import (
     UserWorkoutMetricsExtractor,

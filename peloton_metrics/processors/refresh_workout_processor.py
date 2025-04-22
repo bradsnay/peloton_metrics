@@ -14,13 +14,15 @@ class RefreshWorkoutProcessor(BaseProcessor):
 
     def run(self):
         print(f"------Refreshing workouts started------")
+        # TODO: Use a generator to load these iteratively.
         tracked_users = self.tracked_users_dao.fetch_tracked_users()
         for user in tracked_users:
             user_id = user["user_id"]
             print(f"Updating metrics for user id: {user_id}")
             try:
+                workouts = self.workout_client.fetch_all_workouts(user_id)
                 self.workout_client.save_all_workouts(
-                    user_id, self.workout_client.fetch_all_workouts(user_id)
+                    user_id, workouts
                 )
             except PrivateUserException:
                 print(f"User account is private. user_id:{user_id}")
