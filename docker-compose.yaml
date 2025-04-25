@@ -40,7 +40,6 @@ services:
     <<: *python
     command: "/app/static_test/client_test.py"
 
-  # To connect: psql -U snayski -h postgres
   # To use new username/password: docker compose down --volumes && docker volume ls | awk '$1 == "local" { print $2 }' | xargs --no-run-if-empty docker volume rm
   postgres:
     image: postgres

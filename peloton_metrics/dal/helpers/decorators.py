@@ -20,15 +20,6 @@ def select_as_models(model_type: Type[BaseModel]) -> callable:
             res = select_func(*args, **kwargs)
             if not res:
                 return []
-            models = []
-            for i, row in enumerate(res):
-                row_dict = row
-                if isinstance(row, Row):
-                    row_dict = row._asdict()
-                models.append(model_type(**row_dict))
-            return models
-            # return [model_type(**(row._asdict() if isinstance(row, Row) else row)) for row in res]
-
+            return [model_type(**(row._asdict() if isinstance(row, Row) else row)) for row in res]
         return wrap
-
     return func_decorator

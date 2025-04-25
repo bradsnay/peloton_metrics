@@ -28,21 +28,6 @@ class TrackedUsersDao(BaseDao):
         """
         return self.execute_sql(sql)
 
-    def update_tracked_users(self):
-        sql = f"""
-            INSERT INTO public.tracked_users (
-                user_id,
-                username
-            )
-            SELECT DISTINCT
-                i.user_id,
-                i.user_name
-            FROM public.user_workouts i
-            LEFT JOIN public.tracked_users u on i.user_id = u.user_id
-            WHERE u.user_id IS NULL;
-        """
-        return self.execute_sql(sql)
-
     def upsert_tracked_user(self, user: User):
         column_map = {
             "user_id": SqlType.TEXT,

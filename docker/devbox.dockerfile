@@ -9,7 +9,7 @@ ADD requirements.lock /app
 RUN pip install --no-cache-dir -r requirements.lock
 
 # Update package lists and install dependencies
-RUN apt update && apt install -y --no-install-recommends odbc-postgresql postgresql-client
+RUN apt update && apt install -y --no-install-recommends odbc-postgresql
 
 # Add the application source code.
 ADD . /app

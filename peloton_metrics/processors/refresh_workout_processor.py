@@ -31,7 +31,7 @@ class RefreshWorkoutProcessor(BaseProcessor):
             # TODO: This doesn't account for workout deletions. We'll figure that out at some point.
             if workout_count_diff == 0:
                 print(
-                    f"User {user.username} hasn't worked out since last refresh. Skipping..."
+                    f"{user.username} hasn't worked out since last refresh. Skipping..."
                 )
                 continue
 
