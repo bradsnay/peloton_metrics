@@ -20,6 +20,11 @@ def select_as_models(model_type: Type[BaseModel]) -> callable:
             res = select_func(*args, **kwargs)
             if not res:
                 return []
-            return [model_type(**(row._asdict() if isinstance(row, Row) else row)) for row in res]
+            return [
+                model_type(**(row._asdict() if isinstance(row, Row) else row))
+                for row in res
+            ]
+
         return wrap
+
     return func_decorator
