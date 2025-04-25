@@ -6,3 +6,4 @@ class SqlType(StrEnum):
     TIMESTAMP = auto()
     REAL = auto()
     INT = auto()
+    BOOLEAN = auto()

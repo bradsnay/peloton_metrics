@@ -1,40 +1,31 @@
 from datetime import datetime
 from typing import Annotated, Optional
 
-from pydantic import BaseModel, BeforeValidator, Field, field_serializer
+from pydantic import AliasChoices, BaseModel, BeforeValidator, Field, field_serializer
 
-
-def convert_int_to_datetime(raw_int: Optional[int]) -> datetime:
-    if raw_int is None:
-        return None
-    return datetime.fromtimestamp(raw_int)
+from peloton_metrics.dal.helpers.date_time_helper_functions import (
+    convert_int_to_datetime,
+)
 
 
 class User(BaseModel):
-    user_id: str = Field(alias="id")
+    user_id: str = Field(validation_alias=AliasChoices("id", "user_id"))
     date_initialized: Annotated[
         Optional[datetime], BeforeValidator(convert_int_to_datetime)
     ] = None
-    last_updated: Optional[int] = None
-    username: str
-    first_name: str
-    last_name: str
-    location: Optional[str] = None
-    image_url: Optional[str] = None
-    gender: Optional[str] = None
-    weight: Optional[float] = None
-    weight_unit: Optional[str] = None
-    height: Optional[float] = None
-    height_unit: Optional[str] = None
-    total_workouts: int = 0
-    peloton_join_date: Annotated[
-        Optional[datetime], BeforeValidator(convert_int_to_datetime)
-    ] = Field(alias="created_at")
-    birthday: Annotated[
+    last_updated: Annotated[
         Optional[datetime], BeforeValidator(convert_int_to_datetime)
     ] = None
+    username: str
+    location: Optional[str] = None
+    image_url: Optional[str] = None
+    total_workouts: Optional[int] = 0
+    is_profile_private: Optional[bool] = False
+    peloton_join_date: Annotated[
+        Optional[datetime], BeforeValidator(convert_int_to_datetime)
+    ] = Field(alias="created_at", default=None)
 
-    @field_serializer("date_initialized", "peloton_join_date", "birthday")
+    @field_serializer("date_initialized", "peloton_join_date")
     def convert_datetime_to_str(
         self, model_date_value: Optional[datetime]
     ) -> Optional[str]:

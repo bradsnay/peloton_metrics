@@ -12,7 +12,7 @@ class UserInitializationProcessor(BaseProcessor):
         self.tracked_users_dao = TrackedUsersDao()
 
     def run(self):
-        identity = User(**self.user_client.self_identify())
+        identity = self.user_client.self_identify()
         user_name = identity.username
         user_id = identity.user_id
         print(f"Tracking New User: {user_name}({user_id})")

@@ -5,12 +5,17 @@ The main Peloton API client.
 """
 
 import json
+from typing import Optional
 
 import requests
+from requests.adapters import HTTPAdapter
 from requests.auth import HTTPBasicAuth
+from urllib3.util import Retry
 
 
 class PelotonApiClient:
+
+    MAX_FETCH_LIMIT = 100
 
     # Base URL for all endpoints.
     BASE_URL = "https://api.onepeloton.com"
@@ -47,8 +52,14 @@ class PelotonApiClient:
             "password": auth_config["password"],
             "with_pubsub": False,
         }
-
+        retries = Retry(
+            total=5,
+            backoff_factor=0.5,
+            status_forcelist=[500, 502, 503, 504],
+            allowed_methods={"GET"},
+        )
         self.api_session = requests.Session()
+        self.api_session.mount("https://", HTTPAdapter(max_retries=retries))
         response = self.api_session.post(
             self._generate_full_uri(self.AUTH_LOGIN_ENDPOINT),
             json=payload,
@@ -66,25 +77,36 @@ class PelotonApiClient:
         self._handle_bad_response(response)
         return response
 
-    def fetch_all(self, endpoint: str, **params):
+    def fetch_all(self, endpoint: str, num_records: int = MAX_FETCH_LIMIT):
         params = {
-            **params,
             "page": 0,
-            "limit": 100,
+            "limit": min(self.MAX_FETCH_LIMIT, num_records),
             "joins": "ride,ride.instructor",
         }
         full_response = []
+        records_fetched = 0
         response = self.request(endpoint, **params).json()
 
         data = response["data"]
+        records_fetched += response["count"]
         full_response.extend(data)
+        if records_fetched < 100:
+            return full_response
 
-        for i in range(1, response["page_count"]):
+        params["limit"] = 100
+        while records_fetched < num_records:
             params["page"] += 1
+
             response = self.request(endpoint, **params).json()
             data = response["data"]
-            full_response.extend(data)
-
+            if len(data) == 0:
+                break
+            # We're only allowed to fetch 100 records at a time and changing the limit for pagination
+            # affects how the page param is used. So we will over-fetch and only pull up to the number of
+            # records we need.
+            for i in range(min(100, num_records - records_fetched)):
+                full_response.append(data[i])
+                records_fetched += 1
         return full_response
 
     @staticmethod

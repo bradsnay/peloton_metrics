@@ -1,20 +1,29 @@
+from typing import List
+
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
+from peloton_metrics.dal.helpers.decorators import select_as_models
+from peloton_metrics.dal.helpers.sql_json_helper import SqlJsonHelper
+from peloton_metrics.dal.helpers.sql_type_constants import SqlType
 from peloton_metrics.dal.postgres.base_dao import BaseDao
-from peloton_metrics.dal.postgres.helpers.decorators import select_as_dictionaries
-from peloton_metrics.dal.postgres.helpers.json_helper import JsonHelper
-from peloton_metrics.dal.postgres.helpers.sql_type_constants import SqlType
 from peloton_metrics.models.user import User
 
 
 class TrackedUsersDao(BaseDao):
 
-    @select_as_dictionaries
-    def fetch_tracked_users(self):
+    @select_as_models(User)
+    def fetch_tracked_users(self) -> List[User]:
         sql = f"""
             SELECT
                 user_id AS user_id
+                ,date_initialized AS date_initialized
+                ,last_updated AS last_updated
+                ,username AS username
+                ,location AS location
+                ,image_url AS image_url
+                ,total_workouts AS total_workouts
+                ,peloton_join_date AS peloton_join_date
             FROM public.tracked_users;
         """
         return self.execute_sql(sql)
@@ -37,24 +46,14 @@ class TrackedUsersDao(BaseDao):
     def upsert_tracked_user(self, user: User):
         column_map = {
             "user_id": SqlType.TEXT,
-            "date_initialized": SqlType.TIMESTAMP,
-            "last_updated": SqlType.TIMESTAMP,
             "username": SqlType.TEXT,
-            "first_name": SqlType.TEXT,
-            "last_name": SqlType.TEXT,
             "location": SqlType.TEXT,
             "image_url": SqlType.TEXT,
-            "gender": SqlType.TEXT,
-            "weight": SqlType.REAL,
-            "weight_unit": SqlType.TEXT,
-            "height": SqlType.REAL,
-            "height_unit": SqlType.TEXT,
             "total_workouts": SqlType.INT,
             "peloton_join_date": SqlType.TIMESTAMP,
-            "birthday": SqlType.TIMESTAMP,
         }
         with self.session() as session:
-            JsonHelper.populate_temp_table_from_model_sql(
+            SqlJsonHelper.populate_temp_table_from_model_sql(
                 user, column_map, "NewUser", session
             )
             sql = f"""
@@ -63,52 +62,29 @@ class TrackedUsersDao(BaseDao):
                 WHEN MATCHED THEN
                     UPDATE SET
                         last_updated = NOW(),
-                        first_name = source.first_name,
-                        last_name = source.last_name,
+                        username = source.username,
                         location = source.location,
                         image_url = source.image_url,
-                        gender = source.gender,
-                        weight = source.weight,
-                        weight_unit = source.weight_unit,
-                        height = source.height,
-                        height_unit = source.height_unit,
                         total_workouts = source.total_workouts,
-                        peloton_join_date = source.peloton_join_date,
-                        birthday = source.birthday
+                        peloton_join_date = source.peloton_join_date
                 WHEN NOT MATCHED THEN
                 INSERT (
                     user_id
                     ,last_updated
                     ,username
-                    ,first_name
-                    ,last_name
                     ,location
                     ,image_url
-                    ,gender
-                    ,weight
-                    ,weight_unit
-                    ,height
-                    ,height_unit
                     ,total_workouts
                     ,peloton_join_date
-                    ,birthday
                 )
             VALUES(
                     source.user_id
                     , NOW()
                     ,source.username
-                    ,source.first_name
-                    ,source.last_name
                     ,source.location
                     ,source.image_url
-                    ,source.gender
-                    ,source.weight
-                    ,source.weight_unit
-                    ,source.height
-                    ,source.height_unit
                     ,source.total_workouts
                     ,source.peloton_join_date
-                    ,source.birthday
                 );
             """
             session.execute(text(sql))

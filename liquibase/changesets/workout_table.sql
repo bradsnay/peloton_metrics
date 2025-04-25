@@ -3,11 +3,11 @@ CREATE TABLE public.workouts(
     user_id text NOT NULL,
     created_at timestamptz NOT NULL,
     start_time timestamptz NOT NULL,
-    end_time timestamptz NOT NULL,
+    end_time timestamptz NULL,
     timezone text NOT NULL,
     status text NOT NULL,
     device_type text NOT NULL,
-    fitness_disipline text NOT NULL,
+    fitness_discipline text NOT NULL,
     has_pedaling_metrics boolean NOT NULL,
     has_leaderboard_metrics boolean NOT NULL,
     total_work real NOT NULL,
@@ -15,22 +15,22 @@ CREATE TABLE public.workouts(
     is_outdoor boolean NOT NULL,
     metrics_type text NULL,
     name text NOT NULL,
-    peloton_id text NOT NULL,
+    peloton_id text NULL,
     platform text NOT NULL,
     workout_type text NOT NULL,
-    total_watch_time_seconds integer NOT NULL, -- pull from v2_total_video_buffering_seconds
-    difficulty_rating real NOT NULL,-- pull from 'ride' key
-    difficulty_rating_count integer NOT NULL, -- pull from 'ride' key
-    difficulty_level text NOT NULL, -- pull from 'ride' key
+    total_watch_time_seconds integer NULL, -- pull from v2_total_watch_time_seconds
+    difficulty_rating_avg real NULL,-- pull from 'ride' key
+    difficulty_rating_count integer NULL, -- pull from 'ride' key
+    difficulty_level text NULL, -- pull from 'ride' key
     duration integer NOT NULL, -- pull from 'ride' key
-    image_url text NOT NULL, -- pull from 'ride' key
+    image_url text NULL, -- pull from 'ride' key
     title text NOT NULL, -- pull from 'ride' key
-    instructor_id text NOT NULL, -- pull from 'instructor" key
-    instructor_first_name text NOT NULL, -- pull from 'instructor" key
-    instructor_last_name text NOT NULL, -- pull from 'instructor" key
+    instructor_id text NULL, -- pull from 'instructor" key
+    instructor_first_name text NULL, -- pull from 'instructor" key
+    instructor_last_name text NULL, -- pull from 'instructor" key
     PRIMARY KEY(user_id, workout_id)
 );
 
 CREATE INDEX idx_start_time ON public.workouts(start_time);
 CREATE INDEX idx_status ON public.workouts(status);
-CREATE INDEX idx_fitness_disipline ON public.workouts(fitness_disipline);
+CREATE INDEX idx_fitness_discipline ON public.workouts(fitness_discipline);
