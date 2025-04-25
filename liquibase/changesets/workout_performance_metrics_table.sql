@@ -1,0 +1,20 @@
+CREATE TABLE public.workout_performance_metrics(
+    workout_id text NOT NULL PRIMARY KEY,
+    duration integer NOT NULL,
+    total_output integer NULL,
+    output_unit text NULL,
+    total_distance real NULL,
+    distance_unit text NULL,
+    total_calories integer NULL,
+    calories_unit text NULL,
+    avg_output integer NULL,
+    avg_cadence integer NULL,
+    max_cadence integer NULL,
+    cadence_unit text NULL,
+    avg_resistance integer NULL,
+    max_resistance integer NULL,
+    resistance_unit text NULL,
+    avg_speed real NULL,
+    max_speed real NULL,
+    speed_unit text NULL
+)

@@ -1,0 +1,9 @@
+services:
+  pelotonmetrics:
+    image: pelotonmetrics
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: ["sh", "-c", "pip install debugpy -t /tmp && python /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 peloton_metrics/run/run_workout_refresh.py "]
+    ports:
+      - 5678:5678

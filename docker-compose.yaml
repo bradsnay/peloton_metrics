@@ -1,4 +1,3 @@
-version: "3.8"
 services:
   devbox: &devbox
     build:
@@ -6,19 +5,29 @@ services:
       dockerfile: "./docker/devbox.dockerfile"
     volumes:
       - .:/app
+    depends_on:
+      - postgres
+    networks:
+      - peloton_metrics
+    environment:
+      RUNTIME_ENVIRONMENT: local
+      SECRETS_FOLDER: /run/secrets/
+    secrets:
+      - postgres_pw
+      - postgres_user
 
-  workout_refresh:
+  workout-refresh:
     <<: *devbox
     build:
       context: "."
       dockerfile: "./docker/workout_refresh.dockerfile"
 
-  clean_code:
+  clean-code:
     <<: *devbox
     entrypoint: "/bin/bash"
     command: "./docker/scripts/clean_up_code.bash"
 
-  lock_requirements:
+  lock-requirements:
     <<: *devbox
     entrypoint: "/bin/bash"
     command: "./docker/scripts/lock_requirements.bash"
@@ -27,6 +36,55 @@ services:
     <<: *devbox
     entrypoint: "/usr/local/bin/python"
 
-  static_test_snayski:
+  static-test-snayski:
     <<: *python
     command: "/app/static_test/client_test.py"
+
+  # To use new username/password: docker compose down --volumes && docker volume ls | awk '$1 == "local" { print $2 }' | xargs --no-run-if-empty docker volume rm
+  postgres:
+    image: postgres
+    hostname: db
+    restart: always
+    shm_size: 128mb
+    environment:
+      POSTGRES_DB: peloton_metrics
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_pw
+      POSTGRES_USER_FILE: /run/secrets/postgres_user
+    ports:
+      - 5432:5432
+    networks:
+      - peloton_metrics
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    secrets:
+       - postgres_pw
+       - postgres_user
+
+  liquibase:
+    build:
+      context: '.'
+      dockerfile: ./docker/liquibase.dockerfile
+      secrets:
+        - postgres_pw
+        - postgres_user
+    depends_on:
+      - postgres
+    volumes:
+      - ./liquibase:/liquibase/changelog
+    command: ["update", "--defaults-file=/liquibase/liquibase.properties"]
+    networks:
+      - peloton_metrics
+
+secrets:
+  postgres_pw:
+    file: ./docker/secrets/postgres_root_pw
+
+  postgres_user:
+    file: ./docker/secrets/postgres_user
+
+networks:
+  peloton_metrics:
+    name: "peloton_metrics"
+
+volumes:
+  pgdata:
