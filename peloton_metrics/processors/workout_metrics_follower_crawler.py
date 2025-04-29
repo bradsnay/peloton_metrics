@@ -5,8 +5,8 @@ from peloton_metrics.dal.peloton_api_clients.workout_metrics_client import (
 from peloton_metrics.dal.postgres.tracked_users_dao import TrackedUsersDao
 from peloton_metrics.dal.postgres.workout_dao import WorkoutDao
 from peloton_metrics.exceptions.private_user_exception import PrivateUserException
-from peloton_metrics.processors.base_processor import BaseProcessor
 from peloton_metrics.models.user import User
+from peloton_metrics.processors.base_processor import BaseProcessor
 
 
 class WorkoutMetricsFollowerCrawler(BaseProcessor):
@@ -41,7 +41,6 @@ class WorkoutMetricsFollowerCrawler(BaseProcessor):
             if user.is_profile_private is True:
                 print(f"User account is private. user_id:{user.username}")
                 return
-            
 
             users = []
             users.extend(self.user_client.fetch_user_following(user.user_id))
@@ -57,7 +56,7 @@ class WorkoutMetricsFollowerCrawler(BaseProcessor):
                 print("Saving user: ", user.username)
                 self.user_dao.upsert_tracked_user(user)
                 _run_recursion_helper(user, depth - 1)
-    
+
         user = self.user_client.fetch_user_profile(user_id)
         self.user_dao.upsert_tracked_user(user)
         _run_recursion_helper(user, depth)

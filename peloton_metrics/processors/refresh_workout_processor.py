@@ -26,7 +26,9 @@ class RefreshWorkoutProcessor(BaseProcessor):
             peloton_user = self.user_client.fetch_user_profile(user_id)
 
             self.tracked_users_dao.upsert_tracked_user(peloton_user)
-            workout_count_diff = (peloton_user.total_workouts or 0) - saved_workout_count
+            workout_count_diff = (
+                peloton_user.total_workouts or 0
+            ) - saved_workout_count
 
             # TODO: This doesn't account for workout deletions. We'll figure that out at some point.
             if workout_count_diff == 0:
