@@ -21,7 +21,7 @@ class Workout(BaseModel):
     created_at: Annotated[datetime, BeforeValidator(convert_int_to_datetime)]
     start_time: Annotated[datetime, BeforeValidator(convert_int_to_datetime)]
     end_time: Annotated[Optional[datetime], BeforeValidator(convert_int_to_datetime)]
-    timezone: str
+    timezone: Optional[str]
     status: str
     device_type: str
     fitness_discipline: str
@@ -33,7 +33,7 @@ class Workout(BaseModel):
     metrics_type: Optional[str]
     name: str
     peloton_id: Optional[str]
-    platform: str
+    platform: Optional[str]
     workout_type: str
     total_watch_time_seconds: Optional[int] = Field(
         validation_alias=AliasChoices("v2_total_video_watch_time_seconds")

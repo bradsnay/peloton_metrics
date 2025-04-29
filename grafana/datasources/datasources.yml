@@ -1,0 +1,22 @@
+apiVersion: 2
+
+datasources:
+  - name: Postgres
+    uid: "aek0947pt47i8a"
+    type: postgres
+    url: postgres:5432
+    user: grafana
+    secureJsonData:
+      # Not a fan of storing this here but the password is already exposed in the liquibase
+      # changeset because I don't have a pw manager setup. This is a read-only user anyway
+      # and this data isn't sensitive so it's fine.
+      password: grafanapw
+    jsonData:
+      database: peloton_metrics
+      sslmode: 'disable' # disable/require/verify-ca/verify-full
+      maxOpenConns: 100
+      maxIdleConns: 100
+      maxIdleConnsAuto: true
+      connMaxLifetime: 14400
+      postgresVersion: 903 # 903=9.3, 904=9.4, 905=9.5, 906=9.6, 1000=10
+      timescaledb: false

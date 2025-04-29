@@ -55,7 +55,7 @@ class PelotonApiClient:
         retries = Retry(
             total=5,
             backoff_factor=0.5,
-            status_forcelist=[500, 502, 503, 504],
+            status_forcelist=[500, 502, 503, 504, 524],
             allowed_methods={"GET"},
         )
         self.api_session = requests.Session()
@@ -104,7 +104,7 @@ class PelotonApiClient:
             # We're only allowed to fetch 100 records at a time and changing the limit for pagination
             # affects how the page param is used. So we will over-fetch and only pull up to the number of
             # records we need.
-            for i in range(min(100, num_records - records_fetched)):
+            for i in range(min(num_records - records_fetched, len(data))):
                 full_response.append(data[i])
                 records_fetched += 1
         return full_response
