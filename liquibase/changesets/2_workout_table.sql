@@ -4,7 +4,7 @@ CREATE TABLE public.workouts(
     created_at timestamptz NOT NULL,
     start_time timestamptz NOT NULL,
     end_time timestamptz NULL,
-    timezone text NOT NULL,
+    timezone text NULL,
     status text NOT NULL,
     device_type text NOT NULL,
     fitness_discipline text NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE public.workouts(
     metrics_type text NULL,
     name text NOT NULL,
     peloton_id text NULL,
-    platform text NOT NULL,
+    platform text NULL,
     workout_type text NOT NULL,
     total_watch_time_seconds integer NULL, -- pull from v2_total_watch_time_seconds
     difficulty_rating_avg real NULL,-- pull from 'ride' key
