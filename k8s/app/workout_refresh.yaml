@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: workout-refresh-cron
+  namespace: peloton-metrics
+spec:
+  schedule: "*/5 * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          initContainers:
+            - name: liquibase
+              image: peloton_metrics-liquibase:latest
+              imagePullPolicy: IfNotPresent
+              command: ["liquibase", "update", "--defaults-file=/liquibase/liquibase.properties"]
+          containers:
+            - name: workout-refresh
+              image: peloton_metrics-workout-refresh:latest
+              imagePullPolicy: IfNotPresent
+              env:
+              - name: RUNTIME_ENVIRONMENT
+                value: local
+              - name: SECRETS_FOLDER
+                value: /secrets/
+              volumeMounts:
+                - name: app-secrets
+                  mountPath: /secrets
+                  readOnly: true
+          volumes:
+            - name: app-secrets
+              secret:
+                secretName: app-secrets

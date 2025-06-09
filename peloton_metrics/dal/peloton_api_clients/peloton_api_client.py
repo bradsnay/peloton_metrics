@@ -5,6 +5,7 @@ The main Peloton API client.
 """
 
 import json
+from os import getenv
 from typing import Optional
 
 import requests
@@ -42,7 +43,7 @@ class PelotonApiClient:
         return f"{self.BASE_URL}{endpoint}"
 
     def load_auth_config(self) -> dict:
-        with open(f"./secrets/peloton_api_auth.json") as file:
+        with open(f"{getenv('SECRETS_FOLDER')}peloton_api_auth") as file:
             return json.load(file)
 
     def _create_authenticated_api_session(self):
