@@ -132,6 +132,7 @@
         "type": "grafana-postgresql-datasource",
         "uid": "aek0947pt47i8a"
       },
+      "description": "Excludes cool downs and warm ups.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -210,7 +211,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "select\n    AVG(avg_output) as avg_output,\n    u.username\nfrom public.workouts w\ninner join public.tracked_users u on u.user_id = w.user_id\ninner join public.workout_performance_metrics m on m.workout_id = w.workout_id\nwhere fitness_discipline IN ('cycling' , 'bike_bootcamp')\n and TO_CHAR((created_at AT TIME ZONE timezone)::date, 'YYYY') = '${year}'\nGROUP BY 2\norder by 1\n;",
+          "rawSql": "select\n    AVG(avg_output) as avg_output,\n    u.username\nfrom public.workouts w\ninner join public.tracked_users u on u.user_id = w.user_id\ninner join public.workout_performance_metrics m on m.workout_id = w.workout_id\nwhere fitness_discipline IN ('cycling' , 'bike_bootcamp')\n and TO_CHAR((created_at AT TIME ZONE timezone)::date, 'YYYY') = '${year}'\n and not(title like '%Cool%' or title like '%Warm%')\nGROUP BY 2\norder by 1\n;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -587,5 +588,5 @@
   "timezone": "browser",
   "title": "Scoreboard",
   "uid": "eek0btrola2gwd",
-  "version": 4
+  "version": 5
 }

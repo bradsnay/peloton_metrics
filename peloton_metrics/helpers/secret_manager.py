@@ -11,5 +11,5 @@ class SecretManager:
             return f.read()
 
     def fetch_psql_password(self) -> str:
-        with open(f"{self.secrets_folder}postgres_pw", "r") as f:
+        with open(f"{self.secrets_folder}postgres_root_pw", "r") as f:
             return f.read()
