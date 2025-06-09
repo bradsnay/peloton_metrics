@@ -43,13 +43,13 @@ class PelotonApiClient:
         return f"{self.BASE_URL}{endpoint}"
 
     def load_auth_config(self) -> dict:
-        with open(f"{getenv('SECRETS_FOLDER')}peloton_api_auth") as file:
+        with open(f"{getenv('SECRETS_FOLDER')}peloton_api_auth.json") as file:
             return json.load(file)
 
     def _create_authenticated_api_session(self):
         auth_config = self.load_auth_config()
         payload = {
-            "username_or_email": auth_config["username"],
+            "username_or_email": auth_config["username_or_email"],
             "password": auth_config["password"],
             "with_pubsub": False,
         }
